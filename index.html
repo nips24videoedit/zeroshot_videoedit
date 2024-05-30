@@ -3,9 +3,548 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero-shot Video Edit</title>
+    <title>ASSD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: white;
+            padding: 20px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+        }
+        .header h1 span {
+            color: blueviolet;
+        }
+        .header h2 {
+            font-size: 1.5em;
+            color: #666;
+        }
+        .authors {
+            font-size: 1em;
+            color: #999;
+        }
+        .button {
+            margin-top: 10px;
+        }
+        .images-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .image-item {
+            margin: 10px;
+            text-align: center;
+        }
+        .image-item img {
+            width: 150px;
+            height: auto;
+        }
+        .image-item p {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #333;
+        }
+        .abstract {
+            background-color: white;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .abstract h3 {
+            font-size: 1.5em;
+            color: #333;
+        }
+        .abstract p {
+            font-size: 1em;
+            color: #666;
+            text-align: justify;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        .overview p {
+            font-size: 1em;
+            color: black;
+            text-align: justify;
+            margin: 0 auto;
+            width: 800px; /* 设置与图片相同的宽度 */
+        }
+        .overview img {
+            width: 800px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .overview-section {
+            background-color: white;
+            margin-bottom: 40px; /* 增加每个部分之间的外边距 */
+        }
+
+        .video-style-editing {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .video-style-editing h3 {
+            font-size: 1.5em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .video-style-editing .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .video-style-editing .grid-item {
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border: 2px solid orange;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .video-style-editing .grid-item .videos {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .video-style-editing .grid-item img {
+            width: 256px;
+            height: 256px;
+        }
+
+        .video-style-editing .grid-item p {
+            font-size: 1em;
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .comparisons {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .comparisons h3 {
+            font-size: 1.5em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .comparisons .comparison-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparisons .comparison-item {
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border: 2px solid orange;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .comparisons .comparison-item img {
+            width: 200px;
+            height: auto;
+        }
+
+        .comparisons .comparison-item p {
+            font-size: 1em;
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .video-editing-section {
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .video-editing-section h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .video-editing-section .row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .video-editing-section .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .video-editing-section .box {
+            border: 2px solid orange;
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .video-editing-section .box img {
+            width: 256px;
+            height: auto;
+            display: inline-block;
+        }
+
+        .video-editing-section .box .description-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .video-editing-section .box .description-container p {
+            width: 200px;
+            text-align: center;
+            margin: 0;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .video-editing-section .description {
+            font-size: 1.2em;
+            color: black;
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .optimization-section {
+            text-align: center;
+            margin: 40px 0; /* 调整这个值来控制与上方内容的间距 */
+        }
+        .optimization-section h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .optimization-section img {
+            max-width: 80%;
+            height: auto;
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
-    <h1>Zero-shot Video Edit</h1>
+
+    <div class="header">
+        <h1>Zero-Shot Video Editing through <span>A</span>daptive <span>S</span>liding <span>S</span>core <span>D</span>istillation</h1>
+    </div>
+
+
+    <div class="abstract">
+        <h3>Abstract</h3>
+        <p>
+            The burgeoning field of text-based video generation (T2V) has reignited significant interest in the research of controllable video editing. Although pre-trained T2V-based editing models have achieved efficient editing capabilities, current works are still plagued by two major challenges. Firstly, the inherent limitations of T2V models lead to content inconsistencies and motion discontinuities between frames. Secondly, the notorious issue of over-editing significantly disrupts areas that are intended to remain unaltered. To address these challenges, our work aims to explore a robust video-based editing paradigm based on score distillation. Specifically, we propose an Adaptive Sliding Score Distillation strategy, which not only enhances the stability of T2V supervision but also incorporates both global and local video guidance to mitigate the impact of generation errors. Additionally, we modify the self-attention layers during the editing process to further preserve the key features of the original video. Extensive experiments demonstrate that these strategies enable us to effectively address the aforementioned challenges, achieving superior editing performance compared to existing state-of-the-art methods.
+        </p>
+    </div>
+
+    <div class="overview">
+        <h3>Overview</h3>
+        <div class="overview-section">
+        <img src="imgs/Fig2_00.png" alt="Overview diagram">
+        <p>
+            Our pipeline includes an upper reference branch and a lower editing branch. We use ASSD for T2V models and DDS for T2I models to jointly derive the gradients for updating the latent code of the video. Additionally, we modify the computation in the spatial self-attention layers of the editing branch to incorporate information from the reference branch.
+        </p>
+        </div>
+        
+        <div class="overview-section">
+        <img src="imgs/Fig3_00.png" alt="Overview diagram">
+        <p>
+            <span>ASSD</span> adaptively extracts masks for regions with significant gradient changes based on the temporal variation of the update gradients. It then employs a sliding window-based smoothing operation to mitigate errors in the noise predictions from the reference branch.
+        </p>
+        </div>
+
+    </div>
+
+    <div class="video-style-editing">
+        <h3>Video Editing Using Our ASSD</h3>
+        <div class="grid">
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/1.gif" controls></img>
+                    <img src="imgs/1_our.gif" controls></img>
+                </div>
+                <p>American ➜ Canadian</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/4.gif" controls></img>
+                    <img src="imgs/4_our.gif" controls></img>
+                </div>
+                <p>horse ➜ turtle</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/5.gif" controls></img>
+                    <img src="imgs/5_our.gif" controls></img>
+                </div>
+                <p>brown bear ➜ tiger</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/2.gif" controls></img>
+                    <img src="imgs/2_our.gif" controls></img>
+                </div>
+                <p>ship ➜ sailboat</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/8.gif" controls></img>
+                    <img src="imgs/8_our.gif" controls></img>
+                </div>
+                <p>red ➜ pink</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/11.gif" controls></img>
+                    <img src="imgs/11_our.gif" controls></img>
+                </div>
+                <p>man ➜ rabbit</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/10.gif" controls></img>
+                    <img src="imgs/10_our.gif" controls></img>
+                </div>
+                <p>swans ➜ flamengos</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/3.gif" controls></img>
+                    <img src="imgs/3_our.gif" controls></img>
+                </div>
+                <p>ski lift chairlifts ➜ gondola lifts</p>
+            </div>
+            <div class="grid-item">
+                <div class="videos">
+                    <img src="imgs/7.gif" controls></img>
+                    <img src="imgs/7_our.gif" controls></img>
+                </div>
+                <p>rabbit ➜ dog</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparisons">
+        <h3>Comparisons</h3>
+        <div class="comparison-row">
+            <div class="comparison-item">
+                <img src="imgs/2.gif">
+                <p>Source</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/2_our.gif">
+                <p>Ours</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/2_tav.gif">
+                <p>Tune-A-Video</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/2_cv.gif">
+                <p>ControlVideo</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/2_ft.gif">
+                <p>FateZero</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/2_flat.gif">
+                <p>Flatten</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/2_token.gif">
+                <p>TokenFlow</p>
+            </div>
+        </div>
+        <p class="comparison-description"><span>Ship</span> ➜ <span style="color: red;">Sailboat</span></p>
+        <div class="comparison-row">
+            <div class="comparison-item">
+                <img src="imgs/7.gif">
+                <p>Source</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/7_our.gif">
+                <p>Ours</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/7_tav.gif">
+                <p>Tune-A-Video</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/7_cv.gif">
+                <p>ControlVideo</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/7_ft.gif">
+                <p>FateZero</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/7_flat.gif">
+                <p>Flatten</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/7_token.gif">
+                <p>TokenFlow</p>
+            </div>
+        </div>
+        <p class="comparison-description"><span>Rabbit</span> ➜ <span style="color: red;">Dog</span></p>
+        <div class="comparison-row">
+            <div class="comparison-item">
+                <img src="imgs/11.gif">
+                <p>Source</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/11_our.gif">
+                <p>Ours</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/11_tav.gif">
+                <p>Tune-A-Video</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/11_cv.gif">
+                <p>ControlVideo</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/11_ft.gif">
+                <p>FateZero</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/11_flat.gif">
+                <p>Flatten</p>
+            </div>
+            <div class="comparison-item">
+                <img src="imgs/11_token.gif">
+                <p>TokenFlow</p>
+            </div>
+        </div>
+        <p class="comparison-description"><span>Man</span> ➜ <span style="color: red;">Rabbit</span></p>
+    </div>
+
+    <div class="video-editing-section">
+        <h3>One-Step Pred \( Z_0 \) </h3>
+    
+        <div class="row">
+            <p>Pred \( Z_0 \) of Stable Diffusion</p>
+            <div class="column">
+                <div class="box">
+                    <p>timestep=250</p>
+                    <img src="imgs/250_src_sd.gif" alt="Ref Branch">
+                    <img src="imgs/250_tgt_sd.gif" alt="Edit Branch">
+                    <div class="description-container">
+                        <p>Ref Branch</p>
+                        <p>Edit Branch</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <p>timestep=750</p>
+                    <img src="imgs/750_src_sd.gif" alt="Ref Branch">
+                    <img src="imgs/750_tgt_sd.gif" alt="Edit Branch">
+                    <div class="description-container">
+                        <p>Ref Branch</p>
+                        <p>Edit Branch</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <p>Pred \( Z_0 \) of ModelscopeT2V</p>
+            <div class="column">
+                <div class="box">
+                    <p>timestep=250</p>
+                    <img src="imgs/250_src_ms.gif" alt="Ref Branch">
+                    <img src="imgs/250_tgt_ms.gif" alt="Edit Branch">
+                    <div class="description-container">
+                        <p>Ref Branch</p>
+                        <p>Edit Branch</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <p>timestep=750</p>
+                    <img src="imgs/750_src_ms.gif" alt="Ref Branch">
+                    <img src="imgs/750_tgt_ms.gif" alt="Edit Branch">
+                    <div class="description-container">
+                        <p>Ref Branch</p>
+                        <p>Edit Branch</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <p>Pred \( Z_0 \) of Zeroscope</p>
+            <div class="column">
+                <div class="box">
+                    <p>timestep=250</p>
+                    <img src="imgs/250_src_zs.gif" alt="Ref Branch">
+                    <img src="imgs/250_tgt_zs.gif" alt="Edit Branch">
+                    <div class="description-container">
+                        <p>Ref Branch</p>
+                        <p>Edit Branch</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <p>timestep=750</p>
+                    <img src="imgs/750_src_zs.gif" alt="Ref Branch">
+                    <img src="imgs/750_tgt_zs.gif" alt="Edit Branch">
+                    <div class="description-container">
+                        <p>Ref Branch</p>
+                        <p>Edit Branch</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="description">
+            The score distillation method uses the one-step predicted noise from the diffusion model to calculate the update gradients for the original video. However, as illustrated in the figure above, compared to Stable Diffusion, text-to-video models such as ModelscopeT2V and Zeroscope exhibit significant errors in the one-step predicted noise at larger time steps (\( Z_0 \) is computed from the one-step predicted noise, and since visualizing \( Z_0 \) is more meaningful, we choose to visualize \( Z_0 \)). This presents challenges in directly transferring the score distillation methods used for image editing to video editing.
+        </div>
+    </div>
+
+    <div class="optimization-section">
+        <h2>Optimization Progress</h2>
+        <img src="imgs/Fig4.png" alt="Optimization Progress">
+    </div>
+
 </body>
 </html>
